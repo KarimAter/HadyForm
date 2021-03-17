@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Form from "./components/form";
+import { fullName, credentials } from "../src/types/fullName";
+interface Props {}
+interface userData {
+  userName: fullName;
+  userCreds: credentials;
+}
 
-function App() {
+const App = (props: Props) => {
+  const user: userData = {
+    userName: { firstName: "", middleName: "", lastName: "" },
+    userCreds: { email: "", password: "" },
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="h-screen flex-col text-gray-700 justify-center items-center">
+      <h2> Hello World</h2>
+      <Form user={user}></Form>
     </div>
   );
-}
+};
 
 export default App;
