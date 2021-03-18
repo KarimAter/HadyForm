@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "./components/form";
-import { fullName, credentials, phones, inputType } from "./types/BuilderTyper";
+import { fullName, credentials, phones } from "./types/BuilderTyper";
 interface Props {}
 interface userData {
   name: fullName;
