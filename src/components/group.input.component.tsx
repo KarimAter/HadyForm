@@ -1,14 +1,15 @@
 import React from "react";
-import Input from "./input.component";
+import LabeledFormElement from "./LabeledFormElement.component";
 
 interface Props {
   submitData(data: any): void;
   headerField: Array<string>;
   inputFields: Array<string>;
+  error: string;
 }
 
 const GroupInput = (props: Props) => {
-  const { submitData, headerField, inputFields } = props;
+  const { submitData, headerField, error, inputFields } = props;
 
   return (
     <div
@@ -17,12 +18,13 @@ const GroupInput = (props: Props) => {
     >
       <h2 className="font-semibold text-green-500">{headerField}</h2>
       {inputFields.map((field) => (
-        <Input
+        <LabeledFormElement
           key={field}
           content={field}
+          error={error}
           type={field !== "password" && field !== "email" ? "text" : field}
           handleChange={submitData}
-        ></Input>
+        ></LabeledFormElement>
       ))}
     </div>
   );

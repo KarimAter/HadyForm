@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
-interface input {
+interface Props {
   content: string;
   type: string;
   handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-const Input = (props: input) => {
+const InputField = (props: Props) => {
   const { content, type, handleChange } = props;
-  console.log("rerenders");
+
   return (
-    <div className="flex flex-row justify-between ml-4 ">
-      <label htmlFor={content} className="font-medium text-base w=2/12">
-        {content}
-      </label>
+    <div>
       <input
         type={type}
         id={content}
@@ -25,4 +22,4 @@ const Input = (props: input) => {
   );
 };
 
-export default Input;
+export default InputField;
