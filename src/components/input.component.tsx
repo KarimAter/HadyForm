@@ -10,8 +10,8 @@ const Input = (props: input) => {
   const { content, type, handleChange } = props;
   console.log("rerenders");
   return (
-    <div className="flex flex-col items-center">
-      <label htmlFor={content} className="font-medium text-3xl">
+    <div className="flex flex-row justify-between ml-4 ">
+      <label htmlFor={content} className="font-medium text-base w=2/12">
         {content}
       </label>
       <input
@@ -19,7 +19,7 @@ const Input = (props: input) => {
         id={content}
         name={content}
         onChange={handleChange}
-        className="border-black border-2 w-2/4  text-grey-darkest mt-4"
+        className="border-black border-2 w-10/12  text-grey-darkest mb-1"
       />
     </div>
   );
