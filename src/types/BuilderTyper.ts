@@ -1,17 +1,17 @@
 export interface fullName {
-  firstName: inputType;
-  middleName: inputType;
-  lastName: inputType;
+  firstName: string;
+  middleName: string;
+  lastName: string;
 }
 
 export interface credentials {
-  email: inputType;
-  password: inputType;
+  email: string;
+  password: string;
 }
 
 export interface phones {
-  country: inputType;
-  mobile: inputType;
+  country: string;
+  mobile: string;
 }
 
 export interface inputType {

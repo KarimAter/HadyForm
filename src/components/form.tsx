@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import validate from "../Validator";
 import GroupInput from "./group.input.component";
 
 interface Props {
@@ -9,74 +10,25 @@ interface Props {
 const Form = (props: Props) => {
   const { formData, schema } = props;
 
+  const [textMessage, setTexMessage] = useState("Submission data will be here");
+  // const [user, dispatch] = useReducer((user: any) => user, formData);
+
+  const [user, setUser] = useState(formData);
+
   const inputFields: Array<any> = Object.values(formData);
   const headerFields: Array<any> = Object.keys(formData);
 
-  const [textMessage, setTexMessage] = useState("");
-
-  const handleTextMessage = (e: any) => {};
-
-  const validateText = (p: string): boolean => {
-    return p === "" ? true : false;
-  };
-
-  const validateEmail = (p: string): boolean => {
-    return !p.includes("@");
-  };
-
-  const validatePassword = (p: string): boolean => {
-    return p === "" ? true : false;
-  };
-
-  const validateNumber = (p: string): boolean => {
-    return isNaN(parseInt(p)) ? true : false;
-  };
-
-  const validate = (user: any): Array<boolean> => {
-    let finalError: Array<boolean> = [];
-
-    let dataFields = Object.assign([], ...[...Object.values(user)]);
-    console.log(dataFields);
-
-    for (let k in dataFields) {
-      let data: any;
-      if (dataFields[k]["initialData"] === undefined) data = dataFields[k];
-      else data = dataFields[k]["initialData"];
-      switch (schema[k]) {
-        case "text":
-          finalError.push(validateText(data));
-          break;
-        case "email":
-          finalError.push(validateEmail(data));
-          break;
-        case "password":
-          finalError.push(validatePassword(data));
-
-          break;
-        case "number":
-          finalError.push(validateNumber(data));
-          break;
-
-        default:
-          break;
-      }
-    }
-
-    return finalError;
-  };
+  console.log(inputFields);
+  console.log(headerFields);
 
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
-    let allCheck: boolean = false;
-    const finalError = validate(user);
-    console.log(user);
-    finalError.forEach((b) => (allCheck = allCheck || b));
+    const allCheck = validate(user, schema);
 
     allCheck
       ? setTexMessage("Validation Error")
       : setTexMessage(JSON.stringify(user, null, 2));
     e.preventDefault();
   };
-  const [user, dispatch] = useReducer((user: any) => user, formData);
 
   const setChildData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldName: any = e.target.name;
@@ -86,28 +38,36 @@ const Form = (props: Props) => {
         formData[h][fieldName] = e.target.value;
       }
     });
-    dispatch();
+    // dispatch();
+
+    setUser(formData);
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {headerFields.map((fld, index) => (
-        <GroupInput
-          error={""}
-          submitData={setChildData}
-          key={fld}
-          headerField={fld}
-          inputFields={Object.keys(inputFields[index])}
-        ></GroupInput>
-      ))}
+    <div className="h-full flex flex-row p-6">
+      <div className="w-3/4 ">
+        {headerFields.map((fld, index) => (
+          <GroupInput
+            propagateData={setChildData}
+            key={fld}
+            headerField={fld}
+            inputFields={Object.keys(inputFields[index])}
+          ></GroupInput>
+        ))}
 
-      <button type="submit" onClick={handleSubmit}>
-        Login
-      </button>
+        <button
+          className="bg-blue-500 block w-1/6 mx-auto hover:bg-blue-700 
+          rounded text-gray-900 text-xl font-mono"
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Login
+        </button>
+      </div>
+
       <textarea
-        className="h-1/4 bg-indigo-400"
+        className=" bg-gray-50 w-1/4 h-96 my-auto border-dashed border-2"
         value={textMessage}
-        onChange={handleTextMessage}
       />
     </div>
   );
