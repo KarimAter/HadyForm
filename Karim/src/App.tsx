@@ -5,7 +5,7 @@ interface Props {}
 export interface IUserData {
   name: fullName;
   creds: credentials;
-  phones: phones[];
+  phones: phones;
   [key: string]: any;
 }
 
@@ -42,16 +42,10 @@ const App = (props: Props) => {
       email: "",
       password: "",
     },
-    phones: [
-      {
-        country: "",
-        mobile: "",
-      },
-      {
-        country: "",
-        mobile: "",
-      },
-    ],
+    phones: {
+      country: "",
+      mobile: "",
+    },
   };
 
   const schema: IValidationObject = {

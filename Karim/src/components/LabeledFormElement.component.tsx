@@ -1,17 +1,17 @@
 import React from "react";
-import { IError } from "../Validator";
 import InputField from "./InputField.component";
 
 interface input {
   content: string;
   type: string;
   handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
-  error: Map<string, IError>;
 }
 
 const LabeledFormElement = (props: input) => {
-  const { content, type, error, handleChange } = props;
+  const { content, type, handleChange } = props;
   console.log("rerenders");
+
+  // console.log(type);
 
   switch (type) {
     case "text":
@@ -26,16 +26,13 @@ const LabeledFormElement = (props: input) => {
           >
             {content}
           </label>
-          <div>
-            {true && (
-              <InputField
-                type={type}
-                content={content}
-                handleChange={handleChange}
-              ></InputField>
-            )}
-            <span>{error.get(content)?.errorMessage}</span>
-          </div>
+          {true && (
+            <InputField
+              type={type}
+              content={content}
+              handleChange={handleChange}
+            ></InputField>
+          )}
         </div>
       );
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IUserData, IValidationObject } from "../App";
-import validate, { IError } from "../Validator";
+import validate from "../Validator";
 import GroupInput from "./group.input.component";
 
 interface IProps {
@@ -12,34 +12,13 @@ const Form = ({ formData, schema }: IProps) => {
   const [textMessage, setTextMessage] = useState(
     "Submission data will be here"
   );
-
-  // console.log(formData);
-
   const [user, setUser] = useState(formData);
 
-  const inputFields = Object.assign([], ...[...Object.values(formData)]);
+  const inputFields = Object.values(formData);
   const headerFields = Object.keys(formData);
 
-  let initialError: Map<string, IError> = new Map<string, IError>();
-
-  inputFields.forEach((inputField: string) =>
-    initialError.set(inputField, { error: false, errorMessage: "" })
-  );
-
-  console.log(inputFields);
-
-  const [error, setError] = useState<Map<string, IError>>(
-    new Map<string, IError>()
-  );
-
   const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
-    const finalError = validate(user, schema);
-
-    let allCheck: boolean = false;
-
-    finalError.forEach((b) => (allCheck = allCheck || b.error));
-
-    setError(finalError);
+    const allCheck = validate(user, schema);
 
     allCheck
       ? setTextMessage("Validation Error")
@@ -68,8 +47,7 @@ const Form = ({ formData, schema }: IProps) => {
             propagateData={setChildData}
             key={fld}
             headerField={fld}
-            error={error}
-            inputFields={formData[fld]}
+            inputFields={Object.keys(inputFields[index])}
           ></GroupInput>
         ))}
 

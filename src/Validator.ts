@@ -1,28 +1,29 @@
-export const validate = (user: any, schema: any): boolean => {
-  let finalError: Array<boolean> = [];
+export interface IError {
+  error: boolean;
+  errorMessage: string;
+}
+export const validate = (user: any, schema: any): Map<string, IError> => {
+  let finalError = new Map<string, IError>();
 
   let dataFields = Object.assign([], ...[...Object.values(user)]);
-  console.log(dataFields);
 
-  for (let k in dataFields) {
-    let data: any;
-    // if (dataFields[k]["initialData"] === undefined) data = dataFields[k];
-    // else data = dataFields[k]["initialData"];
+  for (let dataField in dataFields) {
+    let data: string;
 
-    data = dataFields[k];
-    switch (schema[k]) {
+    data = dataFields[dataField];
+    switch (schema[dataField]) {
       case "text":
-        finalError.push(validateText(data));
+        finalError.set(dataField, validateText(data));
         break;
       case "email":
-        finalError.push(validateEmail(data));
+        finalError.set(dataField, validateEmail(data));
         break;
       case "password":
-        finalError.push(validatePassword(data));
+        finalError.set(dataField, validatePassword(data));
 
         break;
       case "number":
-        finalError.push(validateNumber(data));
+        finalError.set(dataField, validateNumber(data));
         break;
 
       default:
@@ -30,27 +31,28 @@ export const validate = (user: any, schema: any): boolean => {
     }
   }
 
-  let allCheck: boolean = false;
-
-  finalError.forEach((b) => (allCheck = allCheck || b));
-
-  return allCheck;
+  return finalError;
 };
 
-const validateText = (p: string): boolean => {
-  return p === "" ? true : false;
+const validateText = (p: string): IError => {
+  if (p === "") return { error: true, errorMessage: "field is empty" };
+  return { error: false, errorMessage: "" };
 };
 
-const validateEmail = (p: string): boolean => {
-  return !p.includes("@");
+const validateEmail = (p: string): IError => {
+  if (!p.includes("@")) return { error: true, errorMessage: "field is empty" };
+  return { error: false, errorMessage: "" };
 };
 
-const validatePassword = (p: string): boolean => {
-  return p === "" ? true : false;
+const validatePassword = (p: string): IError => {
+  if (p === "") return { error: true, errorMessage: "field is empty" };
+  return { error: false, errorMessage: "" };
 };
 
-const validateNumber = (p: string): boolean => {
-  return isNaN(parseInt(p)) ? true : false;
+const validateNumber = (p: string): IError => {
+  if (isNaN(parseInt(p)))
+    return { error: true, errorMessage: "field is empty" };
+  return { error: false, errorMessage: "" };
 };
 
 export default validate;
