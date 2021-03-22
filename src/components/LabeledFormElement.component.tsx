@@ -3,17 +3,30 @@ import { IError } from "../Validator";
 import InputField from "./InputField.component";
 
 interface input {
+  id: string;
   content: string;
   type: string;
   handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
+  handleSelect(e: React.ChangeEvent<HTMLSelectElement>): void;
   error: Map<string, IError>;
 }
 
 const LabeledFormElement = (props: input) => {
-  const { content, type, error, handleChange } = props;
+  const { id, content, type, error, handleSelect, handleChange } = props;
   console.log("rerenders");
 
   switch (type) {
+    case "country": {
+      return (
+        <select name={id} id="countries" onChange={handleSelect}>
+          <option value="">Please Select Country...</option>
+          <option value="Egypt">Egypt</option>
+          <option value="Lebanon">Lebanon</option>
+          <option value="USA">USA</option>
+          <option value="France">France</option>
+        </select>
+      );
+    }
     case "text":
     case "email":
     case "password":
@@ -30,11 +43,11 @@ const LabeledFormElement = (props: input) => {
             {true && (
               <InputField
                 type={type}
-                content={content}
+                content={id}
                 handleChange={handleChange}
               ></InputField>
             )}
-            <span>{error.get(content)?.errorMessage}</span>
+            <span>{error.get(id)?.errorMessage}</span>
           </div>
         </div>
       );

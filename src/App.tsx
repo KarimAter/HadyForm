@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { isTemplateSpan } from "typescript";
 import Form from "./components/form";
 import { fullName, credentials, phones } from "./types/BuilderTyper";
 interface Props {}
@@ -9,7 +11,12 @@ export interface IUserData {
   [key: string]: any;
 }
 
-export type ValidationType = "text" | "email" | "password" | "number";
+export type ValidationType =
+  | "text"
+  | "email"
+  | "password"
+  | "country"
+  | "number";
 
 export interface IValidationObject {
   [key: string]: ValidationType;
@@ -32,7 +39,19 @@ export interface IValidationObject {
 // TODO: Tailwind add your color palette to tailwind without removing tailwind own colors
 
 const App = (props: Props) => {
-  const user: IUserData = {
+  // const user: IUserData =
+
+  const schema: IValidationObject = {
+    firstName: "text",
+    middleName: "text",
+    lastName: "text",
+    email: "email",
+    password: "password",
+    country: "country",
+    mobile: "number",
+  };
+
+  const [user, setUser] = useState({
     name: {
       firstName: "",
       middleName: "",
@@ -52,16 +71,22 @@ const App = (props: Props) => {
         mobile: "",
       },
     ],
-  };
+  });
 
-  const schema: IValidationObject = {
-    firstName: "text",
-    middleName: "text",
-    lastName: "text",
-    email: "email",
-    password: "password",
-    country: "number",
-    mobile: "number",
+  const phoneHandler = (action: string) => {
+    if (action === "add") {
+      user.phones.push({
+        country: "",
+        mobile: "",
+      });
+    } else {
+      if (user.phones.length !== 1) {
+        user.phones.pop();
+      }
+    }
+    setUser({
+      ...user,
+    });
   };
 
   return (
@@ -69,7 +94,7 @@ const App = (props: Props) => {
       <h2 className="mb-2 text-2xl font-bold text-center bg-green-100">
         Hady Form
       </h2>
-      <Form formData={user} schema={schema}></Form>
+      <Form formData={user} phoneHandler={phoneHandler} schema={schema}></Form>
     </div>
   );
 };

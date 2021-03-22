@@ -10,6 +10,7 @@ export interface credentials {
 }
 
 export interface phones {
+  [key: string]: any;
   country: string;
   mobile: string;
 }

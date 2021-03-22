@@ -1,3 +1,5 @@
+import { phones } from "./types/BuilderTyper";
+
 export interface IError {
   error: boolean;
   errorMessage: string;
@@ -5,29 +7,53 @@ export interface IError {
 export const validate = (user: any, schema: any): Map<string, IError> => {
   let finalError = new Map<string, IError>();
 
-  let dataFields = Object.assign([], ...[...Object.values(user)]);
+  let dataFields: [] = Object.assign([], ...[...Object.values(user)]);
 
-  for (let dataField in dataFields) {
-    let data: string;
+  for (const groupField in user) {
+    const dataFields: any = user[groupField];
 
-    data = dataFields[dataField];
-    switch (schema[dataField]) {
-      case "text":
-        finalError.set(dataField, validateText(data));
-        break;
-      case "email":
-        finalError.set(dataField, validateEmail(data));
-        break;
-      case "password":
-        finalError.set(dataField, validatePassword(data));
+    if (Array.isArray(dataFields)) {
+      dataFields.forEach((element: any, index: number) => {
+        for (const dataField in element) {
+          let data: string;
+          data = element[dataField];
+          switch (schema[dataField]) {
+            case "country":
+              finalError.set(`${dataField}_${index}`, validateCountry(data));
+              break;
+            case "number":
+              finalError.set(`${dataField}_${index}`, validateNumber(data));
+              break;
+          }
+        }
+      });
+    } else {
+      for (const dataField in dataFields) {
+        let data: string;
 
-        break;
-      case "number":
-        finalError.set(dataField, validateNumber(data));
-        break;
+        data = dataFields[dataField];
+        switch (schema[dataField]) {
+          case "text":
+            finalError.set(dataField, validateText(data));
+            break;
+          case "email":
+            finalError.set(dataField, validateEmail(data));
+            break;
+          case "password":
+            finalError.set(dataField, validatePassword(data));
 
-      default:
-        break;
+            break;
+          case "number":
+            finalError.set(dataField, validateNumber(data));
+            break;
+          case "country":
+            finalError.set(dataField, validateCountry(data));
+            break;
+
+          default:
+            break;
+        }
+      }
     }
   }
 
@@ -55,4 +81,9 @@ const validateNumber = (p: string): IError => {
   return { error: false, errorMessage: "" };
 };
 
+const validateCountry = (p: string): IError => {
+  if (p === "")
+    return { error: true, errorMessage: "Please Select Country..." };
+  return { error: false, errorMessage: "" };
+};
 export default validate;

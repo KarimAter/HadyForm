@@ -3,12 +3,15 @@ import { IUserData, IValidationObject } from "../App";
 import validate, { IError } from "../Validator";
 import GroupInput from "./group.input.component";
 
+import { phones } from "../types/BuilderTyper";
+
 interface IProps {
   formData: IUserData;
   schema: IValidationObject;
+  phoneHandler: (action: string) => void;
 }
 
-const Form = ({ formData, schema }: IProps) => {
+const Form = ({ formData, schema, phoneHandler }: IProps) => {
   const [textMessage, setTextMessage] = useState(
     "Submission data will be here"
   );
@@ -25,8 +28,6 @@ const Form = ({ formData, schema }: IProps) => {
   inputFields.forEach((inputField: string) =>
     initialError.set(inputField, { error: false, errorMessage: "" })
   );
-
-  console.log(inputFields);
 
   const [error, setError] = useState<Map<string, IError>>(
     new Map<string, IError>()
@@ -48,16 +49,31 @@ const Form = ({ formData, schema }: IProps) => {
   };
 
   const setChildData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fieldName: any = e.target.name;
+    const fieldName: string = e.target.name;
 
     headerFields.forEach((h) => {
-      if (fieldName in formData[h]) {
-        formData[h][fieldName] = e.target.value;
+      if (Array.isArray(formData[h])) {
+        if (fieldName.slice(0, fieldName.length - 2) in formData[h][0]) {
+          formData.phones[parseInt(fieldName.slice(-1))][
+            fieldName.slice(0, fieldName.length - 2)
+          ] = e.target.value;
+        }
+      } else {
+        if (fieldName in formData[h]) {
+          formData[h][fieldName] = e.target.value;
+        }
       }
     });
-    // dispatch();
 
     setUser(formData);
+  };
+
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const fieldName: string = e.target.name;
+    formData.phones[parseInt(fieldName.slice(-1))]["country"] = e.target.value;
+
+    setUser({ ...user, phones: formData.phones });
+    // console.log(e.target.value);
   };
 
   return (
@@ -67,6 +83,8 @@ const Form = ({ formData, schema }: IProps) => {
           <GroupInput
             propagateData={setChildData}
             key={fld}
+            handleSelect={handleSelect}
+            phoneHandler={phoneHandler}
             headerField={fld}
             error={error}
             inputFields={formData[fld]}
