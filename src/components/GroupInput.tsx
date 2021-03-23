@@ -1,6 +1,6 @@
 import React from "react";
-import { IError } from "../Validator";
-import LabeledFormElement from "./LabeledFormElement.component";
+import { IError } from "../validation/validators";
+import LabeledFormElement from "./LabeledFormElement";
 
 interface Props {
   propagateData(data: any): void;

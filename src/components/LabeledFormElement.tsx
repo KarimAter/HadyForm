@@ -1,6 +1,7 @@
 import React from "react";
-import { IError } from "../Validator";
-import InputField from "./InputField.component";
+import { IError } from "../validation/validators";
+import InputField from "./InputField";
+import Select from "./Select";
 
 interface input {
   id: string;
@@ -17,15 +18,7 @@ const LabeledFormElement = (props: input) => {
 
   switch (type) {
     case "country": {
-      return (
-        <select name={id} id="countries" onChange={handleSelect}>
-          <option value="">Please Select Country...</option>
-          <option value="Egypt">Egypt</option>
-          <option value="Lebanon">Lebanon</option>
-          <option value="USA">USA</option>
-          <option value="France">France</option>
-        </select>
-      );
+      return <Select id={id} handleSelect={handleSelect}></Select>;
     }
     case "text":
     case "email":
@@ -55,21 +48,6 @@ const LabeledFormElement = (props: input) => {
     default:
       return <div></div>;
   }
-
-  // return (
-  //   <div className="flex flex-row justify-between ml-4 ">
-  //     <label htmlFor={content} className="font-medium text-base w=2/12">
-  //       {content}
-  //     </label>
-  //     {true && (
-  //       <InputField
-  //         type={type}
-  //         content={content}
-  //         handleChange={handleChange}
-  //       ></InputField>
-  //     )}
-  //   </div>
-  // );
 };
 
 export default LabeledFormElement;

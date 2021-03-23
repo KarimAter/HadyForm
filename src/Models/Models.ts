@@ -1,15 +1,15 @@
-export interface fullName {
+export interface IName {
   firstName: string;
   middleName: string;
   lastName: string;
 }
 
-export interface credentials {
+export interface ICredentials {
   email: string;
   password: string;
 }
 
-export interface phones {
+export interface INumber {
   [key: string]: any;
   country: string;
   mobile: string;
@@ -21,7 +21,7 @@ export interface inputType {
 }
 
 export default interface BuilderTyper {
-  userName: fullName;
-  userCreds: credentials;
-  userPhones: phones;
+  userName: IName;
+  userCreds: ICredentials;
+  userINumber: INumber;
 }

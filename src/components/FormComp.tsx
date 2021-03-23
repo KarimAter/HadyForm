@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { IUserData, IValidationObject } from "../App";
-import validate, { IError } from "../Validator";
-import GroupInput from "./group.input.component";
-
-import { phones } from "../types/BuilderTyper";
+import validate, { IError } from "../validation/validators";
+import GroupInput from "./GroupInput";
 
 interface IProps {
   formData: IUserData;
@@ -37,13 +35,17 @@ const Form = ({ formData, schema, phoneHandler }: IProps) => {
     const finalError = validate(user, schema);
 
     let allCheck: boolean = false;
+    let errorMesage: string = "";
 
-    finalError.forEach((b) => (allCheck = allCheck || b.error));
+    finalError.forEach((b) => {
+      allCheck = allCheck || b.error;
+      errorMesage = ` ${errorMesage} \n ${b.errorMessage}`;
+    });
 
     setError(finalError);
 
     allCheck
-      ? setTextMessage("Validation Error")
+      ? setTextMessage(errorMesage)
       : setTextMessage(JSON.stringify(user, null, 2));
     e.preventDefault();
   };
@@ -92,7 +94,7 @@ const Form = ({ formData, schema, phoneHandler }: IProps) => {
         ))}
 
         <button
-          className="bg-blue-500 block w-1/6 mx-auto hover:bg-blue-700 
+          className="bg-custom-ater-500 block w-1/6 mx-auto hover:bg-blue-700 
           rounded text-gray-900 text-xl font-mono"
           type="submit"
           onClick={handleSubmit}

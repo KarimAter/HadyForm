@@ -1,5 +1,3 @@
-import { phones } from "./types/BuilderTyper";
-
 export interface IError {
   error: boolean;
   errorMessage: string;
@@ -7,12 +5,18 @@ export interface IError {
 export const validate = (user: any, schema: any): Map<string, IError> => {
   let finalError = new Map<string, IError>();
 
-  let dataFields: [] = Object.assign([], ...[...Object.values(user)]);
-
   for (const groupField in user) {
     const dataFields: any = user[groupField];
 
     if (Array.isArray(dataFields)) {
+      if (dataFields.length < 3) {
+        finalError.set("Need 3 phone numbers", {
+          error: true,
+          errorMessage: "need 3 phone numbers",
+        });
+        break;
+      }
+
       dataFields.forEach((element: any, index: number) => {
         for (const dataField in element) {
           let data: string;
